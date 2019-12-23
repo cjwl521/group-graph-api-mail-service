@@ -1,1 +1,0 @@
-# group-graph-api-mail-service
