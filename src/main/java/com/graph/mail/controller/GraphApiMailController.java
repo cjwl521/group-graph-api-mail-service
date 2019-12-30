@@ -18,14 +18,14 @@ public class GraphApiMailController {
 	private GraphApiMailImpl graphApiMail;
 
 	
-	@GetMapping(value = "/mail")
+	@GetMapping(value = "/mail/info")
 	@ResponseBody
 	public BaseResponse getMail() throws Exception {
 
 		return BaseResponse.getInstence().createBySuccessMessage(graphApiMail.getMail());
 	}
 
-	@GetMapping(value = "/mail/info")
+	@GetMapping(value = "/mail/attachments")
 	@ResponseBody
 	public BaseResponse getMailInfo() throws Exception {
 

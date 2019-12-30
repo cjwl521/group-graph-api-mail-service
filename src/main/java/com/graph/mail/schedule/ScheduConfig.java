@@ -14,7 +14,7 @@ public class ScheduConfig {
 	@Autowired
 	private ClientCredentialGrant clientCredentialGrant;
 
-	@Scheduled(cron = "10/60 * * * * ?")
+	@Scheduled(cron = "0 10/30 * * * ?")
 	public void getTokenSchedu() throws Exception {
 		clientCredentialGrant.getAccessTokenByClientCredentialGrant();
 	}

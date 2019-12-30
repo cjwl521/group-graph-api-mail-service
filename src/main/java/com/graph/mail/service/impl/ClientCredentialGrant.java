@@ -15,21 +15,26 @@ import com.microsoft.aad.msal4j.ConfidentialClientApplication;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
 import com.microsoft.aad.msal4j.SilentParameters;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ClientCredentialGrant {
 
 	private static final String CLIENT_ID = "064a66fa-ef83-4776-9997-7c094845667d";
 	private static final String TENANT_GUID = "8dfcce69-73e6-4b79-9e19-6ad647dd1929";
 	private static final String CLIENT_SECRET = "?WTJ_G4=kU[2HvYiMS4GSI7?ZL?rB-F.";
 	private static final String SCOPES = "https://microsoftgraph.chinacloudapi.cn/.default";
-	
-	private static String token = "";
+
+	private static String accessToken = "";
+	private static final String TOKEN = "TOKEN";
+	private static String URL = "https://login.chinacloudapi.cn/" + TENANT_GUID + "/oauth2/v2.0/token";
 
 	public void getAccessTokenByClientCredentialGrant() throws Exception {
-
-		String url = "https://login.chinacloudapi.cn/" + TENANT_GUID + "/oauth2/v2.0/token";
+		
+		Map<String, String> map = new HashMap<String, String>();
 		ConfidentialClientApplication app = ConfidentialClientApplication
-				.builder(CLIENT_ID, ClientCredentialFactory.createFromSecret(CLIENT_SECRET)).authority(url).build();
+				.builder(CLIENT_ID, ClientCredentialFactory.createFromSecret(CLIENT_SECRET)).authority(URL).build();
 
 		ClientCredentialParameters clientCredentialParam = ClientCredentialParameters
 				.builder(Collections.singleton(SCOPES)).build();
@@ -40,21 +45,18 @@ public class ClientCredentialGrant {
 			if (ex != null) {
 				System.out.println("Oops! We have an exception - " + ex.getMessage());
 			}
-			System.out.println("Access Token - " + res.accessToken());
-			token = res.accessToken();
+			accessToken = res.accessToken();
+			log.info("Access Token has bean refreshed[{}]",accessToken);
 		};
 
 		future.whenCompleteAsync(processAuthResult);
 		future.join();
 
 		SilentParameters silentParameters = SilentParameters.builder(Collections.singleton(SCOPES)).build();
-
 		future = app.acquireTokenSilently(silentParameters);
-
 		future.whenCompleteAsync(processAuthResult);
 		future.join();
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("TOKEN", token);
+		map.put(TOKEN, accessToken);
 		Singleton.getInstance().setMap(map);
 	}
 

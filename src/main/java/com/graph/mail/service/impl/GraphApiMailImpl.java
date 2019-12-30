@@ -49,7 +49,6 @@ public class GraphApiMailImpl implements GraphApiMailService {
 		}
 		Map<String, String> map = Singleton.getInstance().getMap();
 		String token = map.get("TOKEN");
-		String mailFoldersId = "AAMkAGQ3ODQ0YjdjLTcxYzQtNGQ3Ny1hMWE2LTg1YTA0MmI1NjE3MwAuAAAAAADWh5oF2bJSSqNdbnPGlRXKAQBiVHAyZNUzS78tunBhB-yBAACNAE0iAAA=";
 		String url = "https://microsoftgraph.chinacloudapi.cn/v1.0/users/mnc.odc.ms.014@icsscn.cn/messages?$select=subject,bodyPreview,createdDateTime,sender,id,isRead";
 		JSONObject object = httpsRequestUtil.httpsGetRequest(url, token, JSONObject.class);
 		log.info(object.toJSONString());
